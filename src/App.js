@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Home from './pages/Home';
 import Play from './pages/Play';
 import TileCreator from './pages/TileCreator';
+import TopNav from './components/TopNav';
 
 const pageVariants = {
   initial: {
@@ -19,6 +20,7 @@ const pageVariants = {
 
 export default () => (
   <Router>
+    <TopNav />
     <Route
       render={({ location }) => (
         <AnimatePresence exitBeforeEnter initial={true}>
