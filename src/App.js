@@ -1,26 +1,67 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { AnimatePresence, motion } from "framer-motion";
+import Home from './pages/Home';
+import Play from './pages/Play';
+import TileCreator from './pages/TileCreator';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const pageVariants = {
+  initial: {
+    opacity: 0,
+  },
+  in: {
+    opacity: 1,
+  },
+  out: {
+    opacity: 0,
+  },
 }
 
-export default App;
+export default () => (
+  <Router>
+    <Route
+      render={({ location }) => (
+        <AnimatePresence exitBeforeEnter initial={true}>
+          <Switch location={location} key={location.pathname}>
+            <Route exact path="/" component={
+              () => (
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                >
+                  <Home />
+                </motion.div>
+                )
+            } />
+            <Route path="/play" component={
+              () => (
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                >
+                  <Play />
+                </motion.div>
+                )
+            } />
+            <Route path="/create" component={
+              () => (
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                >
+                  <TileCreator />
+                </motion.div>
+                )
+            } />
+          </Switch>
+        </AnimatePresence>
+      )}
+    />
+  </Router>
+)
