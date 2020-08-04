@@ -1,15 +1,15 @@
 import React from 'react';
-import logo from '../logo.svg';
-import '../App.css';
-import Links from '../components/Links';
+import logo from '../../logo.svg';
+import '../../App.css';
+import Links from '../../components/Links';
 
-function Play() {
+function Home() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/Play.js</code> and save to reload.
+          Edit <code>src/Home.js</code> and save to reload.
         </p>
         <Links />
       </header>
@@ -17,4 +17,4 @@ function Play() {
   );
 }
 
-export default Play;
+export default Home;

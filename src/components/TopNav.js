@@ -17,6 +17,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
 
 const drawerWidth = 240;
 
@@ -80,7 +81,7 @@ export default function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            <Link href="/" color="inherit" underline='none' onClick={preventDefault}>
+            <Link href="/" color="inherit" underline='none'>
               The Duchess
             </Link>
           </Typography>
@@ -117,7 +118,13 @@ export default function ButtonAppBar() {
           <Link href="/create" color="inherit" underline='none' >
             <ListItem button>
               <ListItemIcon><AddBoxIcon /></ListItemIcon>
-              <ListItemText primary={'Create'} />
+              <ListItemText primary={'Tile Creator'} />
+            </ListItem>
+          </Link>
+          <Link href="/build" color="inherit" underline='none' >
+            <ListItem button>
+              <ListItemIcon><LocalMallIcon /></ListItemIcon>
+              <ListItemText primary={'Bag Builder'} />
             </ListItem>
           </Link>
         </List>

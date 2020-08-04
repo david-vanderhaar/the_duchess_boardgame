@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { AnimatePresence, motion } from "framer-motion";
-import Home from './pages/Home';
-import Play from './pages/Play';
-import TileCreator from './pages/TileCreator';
+import Home from './pages/Home/Home';
+import Play from './pages/Play/Play';
+import TileCreator from './pages/TileCreator/TileCreator';
+import BagBuilder from './pages/BagBuilder/BagBuilder';
 import TopNav from './components/TopNav';
 
 const pageVariants = {
@@ -58,6 +59,18 @@ export default () => (
                   variants={pageVariants}
                 >
                   <TileCreator />
+                </motion.div>
+                )
+            } />
+            <Route path="/build" component={
+              () => (
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                >
+                  <BagBuilder />
                 </motion.div>
                 )
             } />
