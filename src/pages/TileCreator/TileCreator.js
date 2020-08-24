@@ -6,9 +6,33 @@ import { Button } from '@material-ui/core';
 import {cloneDeep} from 'lodash';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
+import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
+
+const MOVE_TYPES = [
+  {
+    type: 'm',
+    getIcon: () => <FaceIcon />,
+  },
+  {
+    type: 'jm',
+    getIcon: () => <ChangeHistoryIcon />,
+  },
+  {
+    type: 'sl',
+    getIcon: () => <FaceIcon />,
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  paletteColumn: {
+
+  },
+  tileColumn: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -85,13 +109,28 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
   },
+  movePalette: {
+    border: 'solid',
+    borderRadius: 5,
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: 20,
+  },
+  movePaletteButton: {
+    margin: 10,
+  },
 }));
 
 function GridSquare({onEdit, x, y, editable, type}) {
   const classes = useStyles();
+  const moveData = MOVE_TYPES.filter((move) => move.type === type);
+  let renderIcon = () => null;
+  if (moveData.length) renderIcon = moveData[0].getIcon;
   return (
     <div onClick={editable ? onEdit : () => null} className={classes.gridSquare}>
       <div>{type}</div>
+      {renderIcon()}
     </div>
   );
 }
@@ -135,7 +174,7 @@ function Grid({ onSetTile, tileData, currentSide, selectedMoveType }) {
   );
 }
 
-function EditableTile({onSetTile, tileData, currentSide, selectedMoveType}) {
+function EditableTile({onFlip, onSetTile, tileData, currentSide, selectedMoveType}) {
   const classes = useStyles();
 
   return (
@@ -155,40 +194,35 @@ function EditableTile({onSetTile, tileData, currentSide, selectedMoveType}) {
       </div>
       <div className={classes.tileBottomLabel}>
         <Typography>Side {currentSide + 1}</Typography>
+        <Button
+          variant="contained"
+          color='secondary'
+          onClick={onFlip}
+        >
+          Flip
+        </Button>
       </div>
     </div>
   );
 }
 
 function MovePalette({selectedMoveType, setMoveType}) {
-  const moveTypes = [
-    {
-      type: 'm',
-      getIcon: () => <FaceIcon />,
-    },
-    {
-      type: 'jm',
-      getIcon: () => <FaceIcon />,
-    },
-    {
-      type: 'sl',
-      getIcon: () => <FaceIcon />,
-    },
-  ];
+  const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.movePalette}>
       {
-        moveTypes.map((move, i) => {
+        MOVE_TYPES.map((move, i) => {
           return (
-            <Chip 
-              key={i}
-              variant={move.type === selectedMoveType ? 'default' : 'outlined'} 
-              color="primary" 
-              icon={move.getIcon()} 
-              label={move.type}
-              onClick={() => setMoveType(move.type)}
-            />
+            <div key={i} className={classes.movePaletteButton}>
+              <Chip 
+                variant={move.type === selectedMoveType ? 'default' : 'outlined'} 
+                color="primary" 
+                icon={move.getIcon()} 
+                label={move.type}
+                onClick={() => setMoveType(move.type)}
+              />
+            </div>
           )
         })
       }
@@ -247,16 +281,13 @@ function TileCreator() {
 
   return (
     <div className={classes.root}>
-      <h1>Tile Creator</h1>
-      <EditableTile onSetTile={setTile} tileData={tile} currentSide={side} selectedMoveType={moveType}/>
-      <Button 
-        variant="contained" 
-        color='primary' 
-        onClick={flipTile}
-      >
-        Flip
-      </Button>
-      <MovePalette selectedMoveType={moveType} setMoveType={setMoveType} />
+      <div className={classes.paletteColumn}>
+        <MovePalette selectedMoveType={moveType} setMoveType={setMoveType} />
+      </div>
+      <div className={classes.tileColumn}>
+        <h1>Tile Creator</h1>
+        <EditableTile onFlip={flipTile} onSetTile={setTile} tileData={tile} currentSide={side} selectedMoveType={moveType}/>
+      </div>
     </div>
   );
 }
