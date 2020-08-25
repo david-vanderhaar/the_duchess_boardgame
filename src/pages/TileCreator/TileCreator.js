@@ -2,24 +2,38 @@ import React, {useState} from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
-import { Button } from '@material-ui/core';
-import {cloneDeep} from 'lodash';
+import { Button, SvgIcon, Tooltip } from '@material-ui/core';
+import {cloneDeep, get} from 'lodash';
 import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
-import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
+import MoveIconPath from '../../assets/icons/MoveIconPath';
+import DreadIconPath from '../../assets/icons/DreadIconPath';
+import StrikeIconPath from '../../assets/icons/StrikeIconPath';
+import StartIconPath from '../../assets/icons/StartIconPath';
 
 const MOVE_TYPES = [
   {
+    type: 's',
+    name: 'Start',
+    definition: "The tile must start on this side.",
+    getIcon: () => <SvgIcon viewBox="0 0 512 512"><StartIconPath /></SvgIcon>,
+  },
+  {
     type: 'm',
-    getIcon: () => <FaceIcon />,
+    name: 'Move',
+    definition: "This icon allows a Troop Tile to move to the indicated square if there is a clear and straight path to it from the starting square (the square the tile occupies on the gameboard). If there is a friendly or enemy Troop Tile in between the starting and target squares, then the move cannot be made. Likewise, the move cannot be made if there is a friendly Troop Tile in the target square. If there is an enemy in the target square, however, the move can be made and the player captures the enemy tile.",
+    getIcon: () => <SvgIcon viewBox="0 0 512 512"><MoveIconPath /></SvgIcon>,
   },
   {
-    type: 'jm',
-    getIcon: () => <ChangeHistoryIcon />,
+    type: 'd',
+    name: 'Dread',
+    definition: "After any movement or placement of a new tile is completed or placement of a new tile, any tile (friendly or enemy) in a square covered by a Dread icon is frozen in place.The tile cannot be moved, captured, shifted by the Command ability, or use any ability, until the Dread icon is removed(i.e.at the start of the controlling player’s turn, the Dread icon is no longer covering the previously frozen tile).The Fort(and Camelot) Tile protects against the Dread icon; a tile in the Fort(and Camelot) cannot be frozen in place, while a tile with a Dread icon inside the Fort(and Camelot) cannot freeze any tile in place outside.Additionally, any tile acting as the Duke, as well as any tile with a Dread icon, is immune to the Dread icon.",
+    getIcon: () => <SvgIcon viewBox="0 0 512 512"><DreadIconPath/></SvgIcon>,
   },
   {
-    type: 'sl',
-    getIcon: () => <FaceIcon />,
+    type: 'st',
+    name: 'Strike',
+    definition: "This icon allows a Troop Tile to capture from afar. Remove an enemy Troop Tile in one of the squares indicated by this icon (see Capturing Tiles, p. 5), but leave the Troop Tile in its original location; using this icon does not move the Troop Tile, but the Tile still flips.This icon has no effect on a friendly tile.",
+    getIcon: () => <SvgIcon viewBox="0 0 512 512"><StrikeIconPath /></SvgIcon>,
   },
 ];
 
@@ -129,7 +143,6 @@ function GridSquare({onEdit, x, y, editable, type}) {
   if (moveData.length) renderIcon = moveData[0].getIcon;
   return (
     <div onClick={editable ? onEdit : () => null} className={classes.gridSquare}>
-      <div>{type}</div>
       {renderIcon()}
     </div>
   );
@@ -163,7 +176,7 @@ function Grid({ onSetTile, tileData, currentSide, selectedMoveType }) {
             {Array(width).fill(null).map((item, x) => {
               const movesAtXY = moves.filter((move) => move.x === x && move.y === y);
               const type = movesAtXY.length ? movesAtXY[0].type : null
-              const editable = movesAtXY.length ? movesAtXY[0].editable : true
+              const editable = get(movesAtXY, '0.editable', true);
               const handleEdit = () => handleEditGridSquare(x, y);
               return <GridSquare onEdit={handleEdit} key={`${x}${y}`} editable={editable} x={x} y={y} type={type}/>
             })}
@@ -214,15 +227,17 @@ function MovePalette({selectedMoveType, setMoveType}) {
       {
         MOVE_TYPES.map((move, i) => {
           return (
-            <div key={i} className={classes.movePaletteButton}>
-              <Chip 
-                variant={move.type === selectedMoveType ? 'default' : 'outlined'} 
-                color="primary" 
-                icon={move.getIcon()} 
-                label={move.type}
-                onClick={() => setMoveType(move.type)}
-              />
-            </div>
+            <Tooltip title={move.definition}>
+              <div key={i} className={classes.movePaletteButton}>
+                  <Chip 
+                    variant={move.type === selectedMoveType ? 'default' : 'outlined'} 
+                    color="primary" 
+                    icon={move.getIcon()} 
+                    label={move.name}
+                    onClick={() => setMoveType(move.type)}
+                  />
+              </div>
+            </Tooltip>
           )
         })
       }
@@ -253,7 +268,7 @@ function TileCreator() {
           {
             x: 2,
             y: 2,
-            type: '*',
+            type: 's',
             editable: false,
           },
         ],
@@ -269,7 +284,7 @@ function TileCreator() {
           {
             x: 2,
             y: 2,
-            type: '*',
+            type: 's',
             editable: false,
           },
         ],
