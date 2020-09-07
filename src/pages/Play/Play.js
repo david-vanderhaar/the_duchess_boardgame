@@ -1,18 +1,24 @@
 import React from 'react';
-import logo from '../../logo.svg';
-import '../../App.css';
-import Links from '../../components/Links';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
+import Game from './Game';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+}));
 
 function Play() {
+  const classes = useStyles();
+  const theme = useTheme();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/Play.js</code> and save to reload.
-        </p>
-        <Links />
-      </header>
+    <div className={classes.root}>
+      <h1>Title</h1>
+      <Game />
     </div>
   );
 }
