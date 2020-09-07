@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
-import { Button, Tooltip, Collapse } from '@material-ui/core';
-import {cloneDeep, get, has, findIndex} from 'lodash';
-import Chip from '@material-ui/core/Chip';
+import { Button } from '@material-ui/core';
+import {cloneDeep, get} from 'lodash';
 import MOVE_TYPES from '../../constants/moveTypes';
 import BasicGrid from '../../components/Grid';
+import MovePalette from './MovePalette';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,19 +99,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  movePalette: {
-    border: 'solid',
-    borderRadius: 5,
-    borderWidth: 1,
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-    margin: 20,
-    padding: 20,
-  },
-  movePaletteButton: {
-    margin: 10,
-  },
 }));
 
 function GridSquare({onEdit, x, y, editable, type}) {
@@ -128,13 +115,13 @@ function GridSquare({onEdit, x, y, editable, type}) {
   );
 }
 
-function Grid({ onSetTile, tileData, currentSide, selectedMoveType }) {
+function EditableTile({onFlip, onSetTile, tileData, currentSide, selectedMoveType}) {
   const classes = useStyles();
-  const {height, width, sides} = tileData;
+  const { height, width, sides } = tileData;
   const moves = sides[currentSide].moves;
   const handleEditGridSquare = (x, y) => {
     let newTileData = cloneDeep(tileData);
-    const newMove = {x, y, type: selectedMoveType}
+    const newMove = { x, y, type: selectedMoveType }
     let moveFound = false;
     newTileData.sides[currentSide].moves = newTileData.sides[currentSide].moves.map((move, i) => {
       if (move.x === x && move.y === y) {
@@ -148,41 +135,34 @@ function Grid({ onSetTile, tileData, currentSide, selectedMoveType }) {
     }
     onSetTile(newTileData);
   };
-  return (
-    <div className={classes.tileGrid}>
-      <BasicGrid 
-        height={height}
-        width={width}
-        renderGridSpace={(x, y, theme) => {
-          const movesAtXY = moves.filter((move) => move.x === x && move.y === y);
-          const type = movesAtXY.length ? movesAtXY[0].type : null
-          const editable = get(movesAtXY, '0.editable', true);
-          const handleEdit = () => handleEditGridSquare(x, y);
-          return <GridSquare onEdit={handleEdit} key={`${x}${y}`} editable={editable} x={x} y={y} type={type} />
-        }}
-        gridSpaceStyles={classes.GridSquare}
-      />
-    </div>
-  );
-}
-
-function EditableTile({onFlip, onSetTile, tileData, currentSide, selectedMoveType}) {
-  const classes = useStyles();
 
   return (
     <div className={classes.editableTileContainer}>
       <div className={classes.tileContainer}>
         <div className={classes.tileLeft}>
-          <Grid onSetTile={onSetTile} tileData={tileData} currentSide={currentSide} selectedMoveType={selectedMoveType}/>
+          <div className={classes.tileGrid}>
+            <BasicGrid
+              height={height}
+              width={width}
+              renderGridSpace={(x, y, theme) => {
+                const movesAtXY = moves.filter((move) => move.x === x && move.y === y);
+                const type = movesAtXY.length ? movesAtXY[0].type : null
+                const editable = get(movesAtXY, '0.editable', true);
+                const handleEdit = () => handleEditGridSquare(x, y);
+                return <GridSquare onEdit={handleEdit} key={`${x}${y}`} editable={editable} x={x} y={y} type={type} />
+              }}
+              gridSpaceStyles={classes.GridSquare}
+            />
+          </div>
           <div className={classes.tileName}>
             <Typography className={classes.title}>
-              Footman
-              </Typography>
+              {tileData.name}
+            </Typography>
           </div>
         </div>
         <div className={classes.tileRight}>
           <div className={classes.tileIcon}>
-            <BrightnessHighIcon />
+            {tileData.icon()}
           </div>
         </div>
       </div>
@@ -200,54 +180,6 @@ function EditableTile({onFlip, onSetTile, tileData, currentSide, selectedMoveTyp
   );
 }
 
-function MovePalette({selectedMoveType, setMoveType}) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const parentMoves = MOVE_TYPES.filter((move) => !has(move, 'parent', false));
-  const isCollapsed = (moveType, childMoves) => (selectedMoveType === moveType) || findIndex(childMoves, { type: selectedMoveType }) > -1;
-  return (
-    <div className={classes.movePalette}>
-      {
-        parentMoves.map((move, i) => {
-          const childMoves = MOVE_TYPES.filter((item) => get(item, 'parent', false) === move.type);
-          return (
-            <div key={i} className={classes.movePaletteButton}>
-              <Tooltip title={move.definition}>
-                <Chip 
-                  variant={move.type === selectedMoveType ? 'default' : 'outlined'} 
-                  color="primary" 
-                  icon={move.getIcon(theme)} 
-                  label={move.name}
-                  onClick={() => setMoveType(move.type)}
-                />
-              </Tooltip>
-              <Collapse in={isCollapsed(move.type, childMoves)}>
-                <div>
-                  {
-                    childMoves.map((childMove, i) => {
-                      return (
-                        <div key={i} className={classes.movePaletteButton}>
-                          <Chip
-                            variant={childMove.type === selectedMoveType ? 'default' : 'outlined'}
-                            color="primary"
-                            icon={childMove.getIcon(theme)}
-                            label={childMove.name}
-                            onClick={() => setMoveType(childMove.type)}
-                          />
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-              </Collapse>
-            </div>
-          )
-        })
-      }
-    </div>
-  )
-}
-
 function TileCreator() {
   const classes = useStyles();
   const [moveType, setMoveType] = useState('m');
@@ -257,6 +189,8 @@ function TileCreator() {
   }
   
   const tileData = {
+    name: 'Footman',
+    icon: () => <BrightnessHighIcon />,
     height: 5,
     width: 5,
     sides: [
