@@ -7,6 +7,8 @@ import {cloneDeep, get} from 'lodash';
 import BasicGrid from '../../components/Grid';
 import GridSquare from '../../components/GridSquare';
 import Tile from '../../components/Tile';
+import NonEditableTile from '../../components/NonEditableTile';
+import EditableTile from '../../components/EditableTile';
 import MovePalette from './MovePalette';
 
 const useStyles = makeStyles((theme) => ({
@@ -164,48 +166,13 @@ function TileCreator() {
       </div>
       <div className={classes.tileColumn}>
         <h1>Tile Creator</h1>
-        {/* Editable tile */}
-        <Tile 
+        <EditableTile 
           onFlip={flipTile} 
-          tileData={tile} 
-          currentSide={side}
-          renderGrid={() => {
-            return (
-              <BasicGrid
-                height={tile.height}
-                width={tile.width}
-                renderGridSpace={(x, y, theme) => {
-                  const movesAtXY = activeMoves.filter((move) => move.x === x && move.y === y);
-                  const type = movesAtXY.length ? movesAtXY[0].type : null
-                  const handleClick = () => handleEditGridSquare(x, y);
-                  return <GridSquare key={`${x}${y}`} onClick={handleClick} type={type} />
-                }}
-                gridSpaceStyles={classes.GridSquare}
-              />
-            )
-          }}
+          onEditGridSquare={handleEditGridSquare} 
+          currentSide={side} 
+          tile={tile} 
         />
-        {/* Non editable tile */}
-        {/* TODO: restyle grid spaces for no highlighting */}
-        <Tile 
-          onFlip={flipTile} 
-          tileData={tile} 
-          currentSide={side}
-          renderGrid={() => {
-            return (
-              <BasicGrid
-                height={tile.height}
-                width={tile.width}
-                renderGridSpace={(x, y, theme) => {
-                  const movesAtXY = activeMoves.filter((move) => move.x === x && move.y === y);
-                  const type = movesAtXY.length ? movesAtXY[0].type : null
-                  return <GridSquare key={`${x}${y}`} type={type} />
-                }}
-                gridSpaceStyles={classes.GridSquare}
-              />
-            )
-          }}
-        />
+        <NonEditableTile onFlip={flipTile} currentSide={side} tile={tile} />
       </div>
     </div>
   );

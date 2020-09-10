@@ -22,27 +22,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flex: 1,
   },
-  gridSquare: {
-    border: 'solid',
-    borderRadius: 5,
-    borderWidth: 1,
-    color: theme.palette.primary.main,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    transition: '0.4s',
-    '&:hover': {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
-      stroke: theme.palette.common.white,
-    },
-  },
 }));
 
-function Grid({ height, width, renderGridSpace, gridSpaceStyles = null }) {
+function Grid({ height, width, renderGridSpace }) {
   const classes = useStyles();
   const theme = useTheme();
+
   return (
     <div className={classes.root}>
       <div className={classes.tileGrid}>
@@ -51,13 +36,8 @@ function Grid({ height, width, renderGridSpace, gridSpaceStyles = null }) {
             <div key={y} className={classes.gridRow}>
               {Array(width).fill(null).map((item, x) => {
                 return (
-                <div 
-                  className={gridSpaceStyles ? null : classes.gridSquare}
-                  style={gridSpaceStyles}
-                >
-                  {renderGridSpace(x, y, theme)}
-                </div>
-                // renderGridSpace(x, y, theme)
+                // <div>{renderGridSpace(x, y, theme)}</div>
+                renderGridSpace(x, y, theme)
                 )
               })}
             </div>

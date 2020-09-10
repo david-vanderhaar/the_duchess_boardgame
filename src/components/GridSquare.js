@@ -4,6 +4,9 @@ import MOVE_TYPES from '../constants/moveTypes';
 
 const useStyles = makeStyles((theme) => ({
   gridSquare: {
+    border: 'solid',
+    borderWidth: 1,
+    bordercolor: theme.palette.primary.main,
     borderRadius: 5,
     color: theme.palette.primary.main,
     display: 'flex',
@@ -21,15 +24,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function GridSquare({ onClick, type }) {
+function GridSquare({ onClick, type, gridSquareClass = false }) {
   const classes = useStyles();
   const theme = useTheme();
-
+  if (!gridSquareClass) gridSquareClass = classes.gridSquare
   const moveData = MOVE_TYPES.filter((move) => move.type === type);
   let renderIcon = () => null;
   if (moveData.length) renderIcon = () => moveData[0].getIcon(theme);
+
   return (
-    <div onClick={onClick} className={classes.gridSquare}>
+    <div onClick={onClick} className={gridSquareClass}>
       {renderIcon()}
     </div>
   );
