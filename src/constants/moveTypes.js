@@ -8,8 +8,9 @@ import CommandIconPath from '../assets/icons/CommandIconPath';
 import DefenseIconPath from '../assets/icons/DefenseIconPath';
 import SlideIconPath from '../assets/icons/SlideIconPath';
 
-const MOVE_TYPE_ENUM = {
-  START: 's',
+export const MOVE_TYPE_ENUM = {
+  FRONT: 's',
+  BACK: 's2',
   MOVE: 'm',
   JUMP_MOVE: 'jm',
   DREAD: 'dr',
@@ -37,10 +38,16 @@ const MOVE_TYPE_ENUM = {
 
 const MOVE_TYPES = [
   {
-    type: MOVE_TYPE_ENUM.START,
-    name: 'Start',
+    type: MOVE_TYPE_ENUM.FRONT,
+    name: 'Front',
     definition: "The tile must start on this side.",
     getIcon: () => <SvgIcon viewBox="0 0 512 512"><StartIconPath /></SvgIcon>,
+  },
+  {
+    type: MOVE_TYPE_ENUM.BACK,
+    name: 'Back',
+    definition: "The tile must start on the other side.",
+    getIcon: (theme) => <SvgIcon style={{ fill: theme.palette.common.white, stroke: theme.palette.primary.main, strokeWidth: 40 }} viewBox="0 0 512 512"><StartIconPath /></SvgIcon>,
   },
   {
     type: MOVE_TYPE_ENUM.MOVE,

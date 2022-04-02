@@ -130,7 +130,7 @@ function TileCreator() {
           {
             x: 2,
             y: 2,
-            type: 's',
+            type: 's2',
             editable: false,
           },
         ],
@@ -172,7 +172,6 @@ function TileCreator() {
           currentSide={side} 
           tile={tile} 
         />
-        <NonEditableTile onFlip={flipTile} currentSide={side} tile={tile} />
       </div>
     </div>
   );
