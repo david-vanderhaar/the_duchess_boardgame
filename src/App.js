@@ -26,7 +26,7 @@ export default () => (
       render={({ location }) => (
         <AnimatePresence exitBeforeEnter initial={true}>
           <Switch location={location} key={location.pathname}>
-            <Route exact path="/" component={
+            <Route exact path="/the_duchess_boardgame/" component={
               () => (
                 <motion.div
                   initial="initial"
@@ -38,7 +38,7 @@ export default () => (
                 </motion.div>
                 )
             } />
-            <Route path="/play" component={
+            <Route path="/the_duchess_boardgame/play" component={
               () => (
                 <motion.div
                   initial="initial"
@@ -50,7 +50,7 @@ export default () => (
                 </motion.div>
                 )
             } />
-            <Route path="/create" component={
+            <Route path="/the_duchess_boardgame/create" component={
               () => (
                 <motion.div
                   initial="initial"
@@ -62,7 +62,7 @@ export default () => (
                 </motion.div>
                 )
             } />
-            <Route path="/build" component={
+            <Route path="/the_duchess_boardgame/build" component={
               () => (
                 <motion.div
                   initial="initial"
