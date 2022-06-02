@@ -5,19 +5,19 @@ function Links() {
     <div>
         <a
           className="App-link"
-          href="/"
+          href="/the_duchess_boardgame"
         >
           Home
         </a>
         <a
           className="App-link"
-          href="/play"
+          href="/the_duchess_boardgame/#/play"
         >
           Play
         </a>
         <a
           className="App-link"
-          href="/create"
+          href="/the_duchess_boardgame/#/create"
         >
           Tile Creator
         </a>

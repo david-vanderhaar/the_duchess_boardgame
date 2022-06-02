@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { AnimatePresence, motion } from "framer-motion";
 import Home from './pages/Home/Home';
 import Play from './pages/Play/Play';
@@ -20,13 +20,13 @@ const pageVariants = {
 }
 
 export default () => (
-  <Router>
+  <Router basename='/the_duchess_boardgame'>
     <TopNav />
     <Route
       render={({ location }) => (
         <AnimatePresence exitBeforeEnter initial={true}>
           <Switch location={location} key={location.pathname}>
-            <Route exact path="/the_duchess_boardgame/" component={
+            <Route exact path="/" component={
               () => (
                 <motion.div
                   initial="initial"
@@ -38,7 +38,7 @@ export default () => (
                 </motion.div>
                 )
             } />
-            <Route path="/the_duchess_boardgame/play" component={
+            <Route path="/play" component={
               () => (
                 <motion.div
                   initial="initial"
@@ -50,7 +50,7 @@ export default () => (
                 </motion.div>
                 )
             } />
-            <Route path="/the_duchess_boardgame/create" component={
+            <Route path="/create" component={
               () => (
                 <motion.div
                   initial="initial"
@@ -62,7 +62,7 @@ export default () => (
                 </motion.div>
                 )
             } />
-            <Route path="/the_duchess_boardgame/build" component={
+            <Route path="/build" component={
               () => (
                 <motion.div
                   initial="initial"

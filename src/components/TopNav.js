@@ -81,7 +81,7 @@ export default function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            <Link href="/the_duchess_boardgame/" color="inherit" underline='none'>
+            <Link href="/the_duchess_boardgame" color="inherit" underline='none'>
               The Duchess
             </Link>
           </Typography>
@@ -103,25 +103,25 @@ export default function ButtonAppBar() {
         </div>
         <Divider />
         <List>
-          <Link href="/the_duchess_boardgame/" color="inherit" underline='none' >
+          <Link href="/the_duchess_boardgame" color="inherit" underline='none' >
             <ListItem button>
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary={'Home'} />
             </ListItem>
           </Link>
-          <Link href="/the_duchess_boardgame/play" color="inherit" underline='none' >
+          <Link href="/the_duchess_boardgame/#/play" color="inherit" underline='none' >
             <ListItem button>
               <ListItemIcon><SportsEsportsIcon /></ListItemIcon>
               <ListItemText primary={'Play'} />
             </ListItem>
           </Link>
-          <Link href="/the_duchess_boardgame/create" color="inherit" underline='none' >
+          <Link href="/the_duchess_boardgame/#/create" color="inherit" underline='none' >
             <ListItem button>
               <ListItemIcon><AddBoxIcon /></ListItemIcon>
               <ListItemText primary={'Tile Creator'} />
             </ListItem>
           </Link>
-          <Link href="/the_duchess_boardgame/build" color="inherit" underline='none' >
+          <Link href="/the_duchess_boardgame/#/build" color="inherit" underline='none' >
             <ListItem button>
               <ListItemIcon><LocalMallIcon /></ListItemIcon>
               <ListItemText primary={'Bag Builder'} />

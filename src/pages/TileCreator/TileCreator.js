@@ -10,6 +10,7 @@ import Tile from '../../components/Tile';
 import NonEditableTile from '../../components/NonEditableTile';
 import EditableTile from '../../components/EditableTile';
 import MovePalette from './MovePalette';
+import {MOVE_TYPE_ENUM} from '../../constants/moveTypes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -141,8 +142,16 @@ function TileCreator() {
   const [tile, setTile] = useState(tileData);
   const activeMoves = tile.sides[side].moves;
 
-  const handleEditGridSquare = (x, y) => {
-    let newTileData = cloneDeep(tile);
+  const eraseMove = (x, y, newTileData) => {
+    const filtered = newTileData.sides[side].moves.filter((move, i) => {
+      return !(move.x === x && move.y === y)
+    })
+    newTileData.sides[side].moves = filtered
+
+    setTile(newTileData);
+  }
+
+  const addMove = (x, y, newTileData) => {
     const newMove = { x, y, type: moveType }
     let moveFound = false;
     newTileData.sides[side].moves = newTileData.sides[side].moves.map((move, i) => {
@@ -152,11 +161,18 @@ function TileCreator() {
       }
       return move;
     })
-    
+
     if (!moveFound) {
       newTileData.sides[side].moves.push(newMove);
     }
+
     setTile(newTileData);
+  }
+
+  const handleEditGridSquare = (x, y) => {
+    let newTileData = cloneDeep(tile);
+    if (moveType === MOVE_TYPE_ENUM.EMPTY) eraseMove(x, y, newTileData)
+    else addMove(x, y, newTileData)
   };
 
   return (

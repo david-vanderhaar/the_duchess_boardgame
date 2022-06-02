@@ -34,9 +34,16 @@ export const MOVE_TYPE_ENUM = {
   JUMP_SLIDE_NE: 'jsl_NE',
   COMMAND: 'c',
   DEFENSE: 'd',
+  EMPTY: 'empty',
 }
 
 const MOVE_TYPES = [
+  {
+    type: MOVE_TYPE_ENUM.EMPTY,
+    name: 'Empty',
+    definition: "Clear this space",
+    getIcon: (theme) => <SvgIcon style={{ fill: theme.palette.common.white, stroke: theme.palette.primary.main, strokeWidth: 40 }} viewBox="0 0 512 512"><DefenseIconPath /></SvgIcon>,
+  },
   {
     type: MOVE_TYPE_ENUM.FRONT,
     name: 'Front',
