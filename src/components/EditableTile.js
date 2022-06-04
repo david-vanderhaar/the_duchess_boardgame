@@ -9,7 +9,6 @@ const useStyles = makeStyles((theme) => ({
     border: 'solid',
     borderWidth: 1,
     bordercolor: theme.palette.primary.main,
-    borderRadius: 5,
     color: theme.palette.primary.main,
     display: 'flex',
     justifyContent: 'center',
@@ -26,12 +25,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditableTile = ({onFlip, tile, currentSide, onEditGridSquare}) => {
+const EditableTile = React.forwardRef(({onFlip, tile, currentSide, onEditGridSquare}, ref) => {
   const classes = useStyles();
   const activeMoves = tile.sides[currentSide].moves;
 
   return (
     <Tile
+      ref={ref}
       onFlip={onFlip}
       tileData={tile}
       currentSide={currentSide}
@@ -51,6 +51,6 @@ const EditableTile = ({onFlip, tile, currentSide, onEditGridSquare}) => {
       }}
     />
   )
-  }
+})
 
 export default EditableTile;

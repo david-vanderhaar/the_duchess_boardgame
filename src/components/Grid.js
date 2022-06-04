@@ -11,12 +11,10 @@ const useStyles = makeStyles((theme) => ({
   },
   tileGrid: {
     display: 'flex',
-    border: 'solid',
-    borderRadius: 5,
+    // border: 'solid',
     borderWidth: 1,
     flex: 5,
     flexDirection: 'column',
-    padding: 5,
   },
   gridRow: {
     display: 'flex',

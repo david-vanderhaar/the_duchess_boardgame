@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
     border: 'solid',
     borderWidth: 1,
     bordercolor: theme.palette.primary.main,
-    borderRadius: 5,
     color: theme.palette.primary.main,
     display: 'flex',
     justifyContent: 'center',
