@@ -1,4 +1,5 @@
 import React from 'react'; 
+import {SvgIcon} from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MOVE_TYPES from '../constants/moveTypes';
 
@@ -23,13 +24,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function GridSquare({ onClick, type, gridSquareClass = false }) {
+function GridSquare({ onClick, type, types, gridSquareClass = false }) {
   const classes = useStyles();
   const theme = useTheme();
   if (!gridSquareClass) gridSquareClass = classes.gridSquare
-  const moveData = MOVE_TYPES.filter((move) => move.type === type);
+  const moveData = MOVE_TYPES.filter((move) => types.includes(move.type));
   let renderIcon = () => null;
-  if (moveData.length) renderIcon = () => moveData[0].getIcon(theme);
+  // if (moveData.length) renderIcon = () => moveData[0].getIcon(theme, {isFullWidth: true});
+  const fullWidthStyle = {width: '100%', height: '100%'};
+  const defaultWidthStyle = {width: '75%', height: '75%'}
+  // if (moveData.length) renderIcon = () => moveData[0].getIcon(theme);
+  if (moveData.length) renderIcon = () => (
+  <SvgIcon>
+    {moveData.map(
+      (item) => item.getIcon(theme)
+    )}
+    <SvgIcon style={fullWidthStyle}>
+      {MOVE_TYPES.filter((type) => type.name === 'Command')[0].getIcon(theme)}
+    </SvgIcon>
+  </SvgIcon>
+  );
 
   return (
     <div onClick={onClick} className={gridSquareClass}>

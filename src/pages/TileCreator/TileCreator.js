@@ -66,21 +66,27 @@ function TileCreator() {
 
   const addMove = (x, y, newTileData) => {
     const newMove = { x, y, type: moveType }
-    let moveFound = false;
-    newTileData.sides[side].moves = newTileData.sides[side].moves.map((move, i) => {
-      if (move.x === x && move.y === y) {
-        moveFound = true;
-        move.type = moveType;
-      }
-      return move;
-    })
-
-    if (!moveFound) {
-      newTileData.sides[side].moves.push(newMove);
-    }
-
+    newTileData.sides[side].moves.push(newMove);
+    console.log(newTileData.sides[side].moves);
     setTile(newTileData);
   }
+  // const addMove = (x, y, newTileData) => {
+  //   const newMove = { x, y, type: moveType }
+  //   let moveFound = false;
+  //   newTileData.sides[side].moves = newTileData.sides[side].moves.map((move, i) => {
+  //     if (move.x === x && move.y === y) {
+  //       moveFound = true;
+  //       move.type = moveType;
+  //     }
+  //     return move;
+  //   })
+
+  //   if (!moveFound) {
+  //     newTileData.sides[side].moves.push(newMove);
+  //   }
+
+  //   setTile(newTileData);
+  // }
 
   const handleEditGridSquare = (x, y) => {
     let newTileData = cloneDeep(tile);

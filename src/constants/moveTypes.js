@@ -5,6 +5,7 @@ import DreadIconPath from '../assets/icons/DreadIconPath';
 import StrikeIconPath from '../assets/icons/StrikeIconPath';
 import StartIconPath from '../assets/icons/StartIconPath';
 import CommandIconPath from '../assets/icons/CommandIconPath';
+import CommandIconV2Path from '../assets/icons/CommandIconPath_v2';
 import DefenseIconPath from '../assets/icons/DefenseIconPath';
 import SlideIconPath from '../assets/icons/SlideIconPath';
 
@@ -200,7 +201,11 @@ const MOVE_TYPES = [
     type: MOVE_TYPE_ENUM.COMMAND,
     name: 'Command',
     definition: "A Troop Tile with these symbols can move other Troop Tiles around it. Instead of moving this Troop Tile, the player moves one of the Troop Tiles he controls from any square indicated by one of these symbols to any other square indicated by one of these symbols; though this tile does not move, it still flips, as always.If the Troop Tile that was moved ends its turn in a square occupied by an enemy tile, capture that tile(see Capturing Tiles, at right); a tile cannot end its move in a square occupied by a friendly tile. The Mountain Tile(see p. 8) does not block Command movement in any way(a tile still cannot end its movement in a Mountain Tile).No other tiles block a Command move in any way; the moving tile simply can move from any square with the Command icon to any other square with the Command icon.",
-    getIcon: () => <SvgIcon viewBox="0 0 512 512"><CommandIconPath /></SvgIcon>,
+    getIcon: (theme, options = {style: {}}) => {
+      const {style} = options
+      return (<SvgIcon style={style} viewBox="0 0 512 512"><CommandIconV2Path /></SvgIcon>)
+    },
+    // getIcon: () => <SvgIcon viewBox="0 0 512 512"><CommandIconPath /></SvgIcon>,
     // getIcon: (theme) => <SvgIcon style={{ fill: theme.palette.common.white, stroke: theme.palette.primary.main, strokeWidth: 40 }} viewBox="0 0 512 512"><DefenseIconPath /></SvgIcon>,
   },
   {

@@ -42,9 +42,9 @@ const EditableTile = React.forwardRef(({onFlip, tile, currentSide, onEditGridSqu
             width={tile.width}
             renderGridSpace={(x, y, theme) => {
               const movesAtXY = activeMoves.filter((move) => move.x === x && move.y === y);
-              const type = movesAtXY.length ? movesAtXY[0].type : null
+              const types = movesAtXY.length ? movesAtXY.map((move) => move.type) : []
               const handleClick = () => onEditGridSquare(x, y);
-              return <GridSquare key={`${x}${y}`} onClick={handleClick} type={type} gridSquareClass={classes.gridSquare}/>
+              return <GridSquare key={`${x}${y}`} onClick={handleClick} types={types} gridSquareClass={classes.gridSquare}/>
             }}
           />
         )

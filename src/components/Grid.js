@@ -34,7 +34,6 @@ function Grid({ height, width, renderGridSpace }) {
             <div key={y} className={classes.gridRow}>
               {Array(width).fill(null).map((item, x) => {
                 return (
-                // <div>{renderGridSpace(x, y, theme)}</div>
                 renderGridSpace(x, y, theme)
                 )
               })}
