@@ -4,9 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import Grid from './Grid';
 import GridSquare from './GridSquare';
+import TileRanker from '../util/tileRanker';
 
 const Tile = React.forwardRef(({ onFlip, tileData, currentSide, renderGrid}, ref) => {
   const classes = useStyles();
+  const score = TileRanker.getScore(tileData)
 
   return (
     <div ref={ref} className={classes.tileContainer}>
@@ -16,7 +18,7 @@ const Tile = React.forwardRef(({ onFlip, tileData, currentSide, renderGrid}, ref
         </div>
         <div className={classes.tileName}>
           <Typography className={classes.title}>
-            {tileData.name}
+            {tileData.name} ({score})
           </Typography>
         </div>
       </div>

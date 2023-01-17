@@ -11,7 +11,38 @@ import Tile from '../../components/Tile';
 import NonEditableTile from '../../components/NonEditableTile';
 import EditableTile from '../../components/EditableTile';
 import MovePalette from './MovePalette';
-import {MOVE_TYPE_ENUM} from '../../constants/moveTypes';
+import MOVE_TYPES, {MOVE_TYPE_ENUM} from '../../constants/moveTypes';
+
+const defaultTileData = {
+  name: 'Footman',
+  icon: () => <BrightnessHighIcon />,
+  height: 5,
+  width: 5,
+  sides: [
+    // side 1
+    {
+      moves: [
+        {
+          x: 2,
+          y: 2,
+          type: 's',
+          editable: false,
+        },
+      ],
+    },
+    // side 2
+    {
+      moves: [
+        {
+          x: 2,
+          y: 2,
+          type: 's2',
+          editable: false,
+        },
+      ],
+    },
+  ],
+}
 
 function TileCreator() {
   const classes = useStyles();
@@ -21,39 +52,14 @@ function TileCreator() {
     setSide(1 - side)
   }
   
-  const tileData = {
-    name: 'Footman',
-    icon: () => <BrightnessHighIcon />,
-    height: 5,
-    width: 5,
-    sides: [
-      // side 1
-      {
-        moves: [
-          {
-            x: 2,
-            y: 2,
-            type: 's',
-            editable: false,
-          },
-        ],
-      },
-      // side 2
-      {
-        moves: [
-          {
-            x: 2,
-            y: 2,
-            type: 's2',
-            editable: false,
-          },
-        ],
-      },
-    ],
-  }
+  const tileData = {...defaultTileData}
 
   const [tile, setTile] = React.useState(tileData);
   const activeMoves = tile.sides[side].moves;
+
+  const resetTileData = () => {
+    setTile(defaultTileData)
+  }
 
   const eraseMove = (x, y, newTileData) => {
     const filtered = newTileData.sides[side].moves.filter((move, i) => {
@@ -64,29 +70,27 @@ function TileCreator() {
     setTile(newTileData);
   }
 
-  const addMove = (x, y, newTileData) => {
-    const newMove = { x, y, type: moveType }
-    newTileData.sides[side].moves.push(newMove);
-    console.log(newTileData.sides[side].moves);
-    setTile(newTileData);
-  }
   // const addMove = (x, y, newTileData) => {
   //   const newMove = { x, y, type: moveType }
-  //   let moveFound = false;
-  //   newTileData.sides[side].moves = newTileData.sides[side].moves.map((move, i) => {
-  //     if (move.x === x && move.y === y) {
-  //       moveFound = true;
-  //       move.type = moveType;
-  //     }
-  //     return move;
-  //   })
-
-  //   if (!moveFound) {
-  //     newTileData.sides[side].moves.push(newMove);
-  //   }
-
+  //   newTileData.sides[side].moves.push(newMove);
   //   setTile(newTileData);
   // }
+  const addMove = (x, y, newTileData) => {
+    const newMove = { x, y, type: moveType }
+    let moveFound = null;
+    newTileData.sides[side].moves = newTileData.sides[side].moves.map((move, i) => {
+      if (move.x === x && move.y === y) {
+        moveFound = move.type;
+      }
+      return move;
+    })
+
+    if (!moveFound || (moveType === MOVE_TYPE_ENUM.COMMAND && moveFound !== MOVE_TYPE_ENUM.COMMAND)) {
+      newTileData.sides[side].moves.push(newMove);
+    }
+
+    setTile(newTileData);
+  }
 
   const handleEditGridSquare = (x, y) => {
     let newTileData = cloneDeep(tile);
@@ -104,13 +108,22 @@ function TileCreator() {
       </div>
       <div className={classes.tileColumn}>
         <h1>Tile Creator</h1>
-        <Button
-          variant="contained"
-          color='secondary'
-          onClick={handleExportAsPng}
-        >
-          Export as PNG
-        </Button>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <Button
+            variant="contained"
+            color='secondary'
+            onClick={handleExportAsPng}
+          >
+            Export as PNG
+          </Button>
+          <Button
+            variant="contained"
+            color='secondary'
+            onClick={resetTileData}
+          >
+            Reset
+          </Button>
+        </div>
         <div className={classes.tileSideIndicator}>
           <Typography style={{marginRight: 10}}>Side {side + 1}</Typography>
           <Button
@@ -126,7 +139,7 @@ function TileCreator() {
           onFlip={flipTile} 
           onEditGridSquare={handleEditGridSquare} 
           currentSide={side} 
-          tile={tile} 
+          tile={tile}
         />
       </div>
     </div>

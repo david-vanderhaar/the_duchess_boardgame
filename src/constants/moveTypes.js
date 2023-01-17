@@ -12,6 +12,8 @@ import SlideIconPath from '../assets/icons/SlideIconPath';
 export const MOVE_TYPE_ENUM = {
   FRONT: 's',
   BACK: 's2',
+  SOFT_MOVE: 'sm',
+  SOFT_JUMP: 'sj',
   MOVE: 'm',
   JUMP_MOVE: 'jm',
   DREAD: 'dr',
@@ -64,10 +66,22 @@ const MOVE_TYPES = [
     getIcon: () => <SvgIcon viewBox="0 0 512 512"><MoveIconPath /></SvgIcon>,
   },
   {
+    type: MOVE_TYPE_ENUM.SOFT_MOVE,
+    name: 'Soft Move',
+    definition: "This icon allows a Troop Tile to move to the indicated square if there is a clear and straight path to it from the starting square (the square the tile occupies on the gameboard). If there is a friendly or enemy Troop Tile in between the starting and target squares, then the move cannot be made. Likewise, the move cannot be made if there is a friendly Troop Tile in the target square.",
+    getIcon: () => <SvgIcon viewBox="0 0 512 512"><circle cx="256" cy="256" r="100" /></SvgIcon>,
+  },
+  {
     type: MOVE_TYPE_ENUM.JUMP_MOVE,
     name: 'Jump Move',
     definition: "This icon allows a Troop Tile to move to the square shown, jumping over any Troop Tile (friend or enemy) along a shortest path from the starting square to the target square.If there is a friendly Troop Tile in the target square, the move cannot be made.If there is an enemy in the target square, the move can be made and the enemy tile is captured(see Capturing Tiles, p. 5).Nothing happens to the Troop Tiles that were jumped over.",
     getIcon: (theme) => <SvgIcon style={{ fill: theme.palette.common.white, stroke: theme.palette.primary.main, strokeWidth: 40 }} viewBox="0 0 512 512"><MoveIconPath /></SvgIcon>,
+  },
+  {
+    type: MOVE_TYPE_ENUM.SOFT_JUMP,
+    name: 'Soft Jump',
+    definition: "This icon allows a Troop Tile to move to the square shown, jumping over any Troop Tile (friend or enemy) along a shortest path from the starting square to the target square.If there is a friendly Troop Tile in the target square, the move cannot be made.If there is an enemy in the target square, the move can be made. Nothing happens to the Troop Tiles that were jumped over.",
+    getIcon: (theme) => <SvgIcon style={{ fill: theme.palette.common.white, stroke: theme.palette.primary.main, strokeWidth: 40 }} viewBox="0 0 512 512"><circle cx="256" cy="256" r="100" /></SvgIcon>,
   },
   {
     type: MOVE_TYPE_ENUM.DREAD,

@@ -1,7 +1,7 @@
 import React from 'react'; 
 import {SvgIcon} from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import MOVE_TYPES from '../constants/moveTypes';
+import MOVE_TYPES, { MOVE_TYPE_ENUM } from '../constants/moveTypes';
 
 const useStyles = makeStyles((theme) => ({
   gridSquare: {
@@ -30,19 +30,20 @@ function GridSquare({ onClick, type, types, gridSquareClass = false }) {
   if (!gridSquareClass) gridSquareClass = classes.gridSquare
   const moveData = MOVE_TYPES.filter((move) => types.includes(move.type));
   let renderIcon = () => null;
-  // if (moveData.length) renderIcon = () => moveData[0].getIcon(theme, {isFullWidth: true});
   const fullWidthStyle = {width: '100%', height: '100%'};
   const defaultWidthStyle = {width: '75%', height: '75%'}
   // if (moveData.length) renderIcon = () => moveData[0].getIcon(theme);
+  // WIP: Command Icon
+  const icons = moveData.map((item) => {
+    let style = (moveData.length > 1 && item.type === MOVE_TYPE_ENUM.COMMAND) ? {position: 'absolute', top: 0, left: 0} : {}
+    return item.getIcon(theme, {style})
+  })
   if (moveData.length) renderIcon = () => (
-  <SvgIcon>
-    {moveData.map(
-      (item) => item.getIcon(theme)
-    )}
-    <SvgIcon style={fullWidthStyle}>
-      {MOVE_TYPES.filter((type) => type.name === 'Command')[0].getIcon(theme)}
-    </SvgIcon>
-  </SvgIcon>
+    <div style={{position: 'relative'}}>
+      {icons.map(
+        (icon) => (icon)
+      )}
+    </div>
   );
 
   return (
