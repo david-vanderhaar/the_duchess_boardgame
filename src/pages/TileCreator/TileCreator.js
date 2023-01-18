@@ -44,6 +44,9 @@ const defaultTileData = {
   ],
 }
 
+const movesContainCommandMove = (moves) => moves.filter((move) => move.type === MOVE_TYPE_ENUM.COMMAND).length > 0
+const filterMovesByXY = (moves, x ,y) => moves.filter((move) => move.x === x && move.y === y)
+
 function TileCreator() {
   const classes = useStyles();
   const [moveType, setMoveType] = React.useState('m');
@@ -70,22 +73,15 @@ function TileCreator() {
     setTile(newTileData);
   }
 
-  // const addMove = (x, y, newTileData) => {
-  //   const newMove = { x, y, type: moveType }
-  //   newTileData.sides[side].moves.push(newMove);
-  //   setTile(newTileData);
-  // }
   const addMove = (x, y, newTileData) => {
     const newMove = { x, y, type: moveType }
-    let moveFound = null;
-    newTileData.sides[side].moves = newTileData.sides[side].moves.map((move, i) => {
-      if (move.x === x && move.y === y) {
-        moveFound = move.type;
-      }
-      return move;
-    })
+    const movesAtXY = filterMovesByXY(newTileData.sides[side].moves, x, y)
 
-    if (!moveFound || (moveType === MOVE_TYPE_ENUM.COMMAND && moveFound !== MOVE_TYPE_ENUM.COMMAND)) {
+    if (
+      movesAtXY.length === 0
+        || (moveType === MOVE_TYPE_ENUM.COMMAND && !movesContainCommandMove(movesAtXY))
+        || (moveType !== MOVE_TYPE_ENUM.COMMAND && movesAtXY.length === 1 && movesContainCommandMove(movesAtXY))
+      ) {
       newTileData.sides[side].moves.push(newMove);
     }
 
