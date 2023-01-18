@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 import { Button } from '@material-ui/core';
 import {cloneDeep, get} from 'lodash';
@@ -46,6 +47,7 @@ const defaultTileData = {
 
 const movesContainCommandMove = (moves) => moves.filter((move) => move.type === MOVE_TYPE_ENUM.COMMAND).length > 0
 const filterMovesByXY = (moves, x ,y) => moves.filter((move) => move.x === x && move.y === y)
+const filterByCommandMove = (moves) => moves.filter((move) => move.type === MOVE_TYPE_ENUM.COMMAND)
 
 function TileCreator() {
   const classes = useStyles();
@@ -72,15 +74,38 @@ function TileCreator() {
     const newMove = { x, y, type: moveType }
     const movesAtXY = filterMovesByXY(newTileData.sides[side].moves, x, y)
 
+
     if (
       movesAtXY.length === 0
         || (moveType === MOVE_TYPE_ENUM.COMMAND && !movesContainCommandMove(movesAtXY))
         || (moveType !== MOVE_TYPE_ENUM.COMMAND && movesAtXY.length === 1 && movesContainCommandMove(movesAtXY))
       ) {
-      newTileData.sides[side].moves.push(newMove);
+      pushMove(newTileData, side, newMove)
+    } else if (moveType !== MOVE_TYPE_ENUM.COMMAND && movesAtXY.length >= 1) {
+      replaceMove(newTileData, side, newMove)
     }
 
     setTile(newTileData);
+  }
+
+  const pushMove = (newTileData, side, newMove) => {
+    newTileData.sides[side].moves.push(newMove);
+  }
+
+  const replaceMove = (newTileData, side, newMove) => {
+    const movesAtXY = filterMovesByXY(newTileData.sides[side].moves, newMove.x, newMove.y)
+    newTileData.sides[side].moves = [
+      newMove,
+      ...newTileData.sides[side].moves.filter(
+        (move) => {
+          if (move.x === newMove.x && move.y === newMove.y) {
+            return move.type === MOVE_TYPE_ENUM.COMMAND
+          }
+          return true
+        }
+      )
+    ]
+    
   }
 
   const handleEditGridSquare = (x, y, currentSide) => {
@@ -88,6 +113,12 @@ function TileCreator() {
     if (moveType === MOVE_TYPE_ENUM.EMPTY) eraseMove(x, y, newTileData, currentSide)
     else addMove(x, y, newTileData, currentSide)
   };
+
+  const handleEditTileName = (event) => {
+    let newTileData = cloneDeep(tile);
+    newTileData.name = event.target.value
+    setTile(newTileData)
+  }
 
   const tileComponentRef = React.useRef();
   const handleExportAsPng = () => exportAsPng(tileComponentRef)
@@ -99,6 +130,7 @@ function TileCreator() {
       </div>
       <div className={classes.tileColumn}>
         <h1>Tile Creator</h1>
+        <OutlinedInput style={{marginBottom: 10}} placeholder={tileData.name} onChange={handleEditTileName} />
         <div style={{display: 'flex', flexDirection: 'row'}}>
           <Button
             variant="contained"

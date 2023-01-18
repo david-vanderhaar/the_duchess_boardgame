@@ -19,7 +19,7 @@ const Tile = React.forwardRef(({ onFlip, tileData, currentSide, renderGrid}, ref
           {renderGrid()}
         </div>
         <div className={classes.tileName}>
-          <Typography contenteditable="true" className={classes.title}>
+          <Typography className={classes.title}>
             {tileData.name} ({side})
           </Typography>
           <div>score: {score} of {total}</div>
