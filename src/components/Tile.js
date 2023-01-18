@@ -8,7 +8,9 @@ import TileRanker from '../util/tileRanker';
 
 const Tile = React.forwardRef(({ onFlip, tileData, currentSide, renderGrid}, ref) => {
   const classes = useStyles();
-  const score = TileRanker.getScore(tileData)
+  const score = TileRanker.getScore([tileData.sides[currentSide]])
+  const total = TileRanker.getScore(tileData.sides)
+  const side = currentSide ? 'back' : 'front'
 
   return (
     <div ref={ref} className={classes.tileContainer}>
@@ -17,9 +19,10 @@ const Tile = React.forwardRef(({ onFlip, tileData, currentSide, renderGrid}, ref
           {renderGrid()}
         </div>
         <div className={classes.tileName}>
-          <Typography className={classes.title}>
-            {tileData.name} ({score})
+          <Typography contenteditable="true" className={classes.title}>
+            {tileData.name} ({side})
           </Typography>
+          <div>score: {score} of {total}</div>
         </div>
       </div>
       <div className={classes.tileRight}>

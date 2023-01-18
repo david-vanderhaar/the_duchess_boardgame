@@ -41,7 +41,7 @@ function GridSquare({ onClick, type, types, gridSquareClass = false }) {
   if (moveData.length) renderIcon = () => (
     <div style={{position: 'relative'}}>
       {icons.map(
-        (icon) => (icon)
+        (icon, i) => <span key={i}>{icon}</span>
       )}
     </div>
   );

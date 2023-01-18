@@ -14,7 +14,7 @@ import MovePalette from './MovePalette';
 import MOVE_TYPES, {MOVE_TYPE_ENUM} from '../../constants/moveTypes';
 
 const defaultTileData = {
-  name: 'Footman',
+  name: 'Name',
   icon: () => <BrightnessHighIcon />,
   height: 5,
   width: 5,
@@ -50,21 +50,16 @@ const filterMovesByXY = (moves, x ,y) => moves.filter((move) => move.x === x && 
 function TileCreator() {
   const classes = useStyles();
   const [moveType, setMoveType] = React.useState('m');
-  const [side, setSide] = React.useState(0);
-  const flipTile = () => {
-    setSide(1 - side)
-  }
   
   const tileData = {...defaultTileData}
 
   const [tile, setTile] = React.useState(tileData);
-  const activeMoves = tile.sides[side].moves;
 
   const resetTileData = () => {
     setTile(defaultTileData)
   }
 
-  const eraseMove = (x, y, newTileData) => {
+  const eraseMove = (x, y, newTileData, side) => {
     const filtered = newTileData.sides[side].moves.filter((move, i) => {
       return !(move.x === x && move.y === y)
     })
@@ -73,7 +68,7 @@ function TileCreator() {
     setTile(newTileData);
   }
 
-  const addMove = (x, y, newTileData) => {
+  const addMove = (x, y, newTileData, side) => {
     const newMove = { x, y, type: moveType }
     const movesAtXY = filterMovesByXY(newTileData.sides[side].moves, x, y)
 
@@ -88,10 +83,10 @@ function TileCreator() {
     setTile(newTileData);
   }
 
-  const handleEditGridSquare = (x, y) => {
+  const handleEditGridSquare = (x, y, currentSide) => {
     let newTileData = cloneDeep(tile);
-    if (moveType === MOVE_TYPE_ENUM.EMPTY) eraseMove(x, y, newTileData)
-    else addMove(x, y, newTileData)
+    if (moveType === MOVE_TYPE_ENUM.EMPTY) eraseMove(x, y, newTileData, currentSide)
+    else addMove(x, y, newTileData, currentSide)
   };
 
   const tileComponentRef = React.useRef();
@@ -120,23 +115,20 @@ function TileCreator() {
             Reset
           </Button>
         </div>
-        <div className={classes.tileSideIndicator}>
-          <Typography style={{marginRight: 10}}>Side {side + 1}</Typography>
-          <Button
-            variant="contained"
-            color='secondary'
-            onClick={flipTile}
-          >
-            Flip
-          </Button>
-          </div>
-        <EditableTile
-          ref={tileComponentRef}
-          onFlip={flipTile} 
-          onEditGridSquare={handleEditGridSquare} 
-          currentSide={side} 
-          tile={tile}
-        />
+        <div ref={tileComponentRef}>
+          <EditableTile
+            // onFlip={flipTile} 
+            onEditGridSquare={(x, y) => handleEditGridSquare(x, y, 0)} 
+            currentSide={0} 
+            tile={tile}
+          />
+          <EditableTile
+            // onFlip={flipTile} 
+            onEditGridSquare={(x, y) => handleEditGridSquare(x, y, 1)} 
+            currentSide={1}
+            tile={tile}
+          />
+        </div>
       </div>
     </div>
   );
