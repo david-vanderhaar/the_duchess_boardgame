@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: 1,
     display: 'flex',
     flexWrap: 'wrap',
-    flexDirection: 'column',
     margin: 20,
     padding: 20,
   },

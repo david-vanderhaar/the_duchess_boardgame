@@ -147,7 +147,7 @@ function TileCreator() {
             Reset
           </Button>
         </div>
-        <div ref={tileComponentRef}>
+        <div ref={tileComponentRef} style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
           <EditableTile
             // onFlip={flipTile} 
             onEditGridSquare={(x, y) => handleEditGridSquare(x, y, 0)} 
@@ -170,17 +170,15 @@ function TileCreator() {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
     flexWrap: 'wrap-reverse',
   },
   paletteColumn: {
     flex: 1,
+    alignSelf: 'end'
   },
   tileColumn: {
     display: 'flex',
     flex: 2,
-    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
   },
