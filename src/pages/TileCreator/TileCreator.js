@@ -121,7 +121,7 @@ function TileCreator() {
   }
 
   const tileComponentRef = React.useRef();
-  const handleExportAsPng = () => exportAsPng(tileComponentRef)
+  const handleExportAsPng = () => exportAsPng(tileComponentRef, tile.name)
 
   return (
     <div className={classes.root}>
